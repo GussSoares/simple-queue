@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  producer:
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    depends_on:
+      - localstack
+    volumes:
+      - .:/usr/src/app
+    links: 
+      - localstack
+
+    stdin_open: true
+    tty: true
+    command: python producer.py
+
+    environment:
+      COPILOT_SNS_TOPIC_ARNS: '{"simple_queue": "arn:aws:sns:us-east-1:000000000000:simple-queue"}'
+
+  consumer:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - localstack
+      - producer
+    volumes:
+      - .:/usr/src/app
+    
+    stdin_open: true
+    tty: true
+    command: python consumer.py
+
+    environment:
+      COPILOT_QUEUE_URI: http://172.18.0.5:4566/000000000000/simple-queue
+      MAX_NUMBER_OF_MESSAGES: 1
+      WAIT_TIME_SECONDS: 2
+
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
+    image: localstack/localstack
+
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
