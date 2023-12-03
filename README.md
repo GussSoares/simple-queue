@@ -1,5 +1,8 @@
 # Simple Queue
 
+[![Pylint](https://github.com/GussSoares/simple_queue/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/GussSoares/simple_queue/actions/workflows/pylint.yml)
+
+
 Este projeto consiste em uma implementação simples apresenta o funcionamento de dois serviços.
 
 - [Producer](/producer.py)

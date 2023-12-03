@@ -1,3 +1,6 @@
+"""Consumer file
+"""
+
 import os
 import json
 import time
@@ -19,8 +22,8 @@ if __name__ == "__main__":
         )
         for msg in messages:
             parse_message = json.loads(msg.body)
-            
+
             message = json.loads(parse_message['Message'])['message']
-            
+
             print(f"Mensagem recebida: {message}")
             msg.delete()
